@@ -1,0 +1,13 @@
+{% load django_bootstrap5 %}
+<h1>All Post</h1>
+{% for post in posts %}
+<a href="/posts/{{post.slug}}"><h3>{{post}}</h3></a>
+{% endfor %}
+
+<form action="" method="post" enctype="multipart/form-data">
+    {%  csrf_token %}
+    {% bootstrap_form form %}
+
+    {% bootstrap_button button_type="submit" content="add Post" %}
+    {% bootstrap_button button_type="reset" content="Cancel" %}
+</form>
