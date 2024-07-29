@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from django.views.generic import ListView,DetailView
 
-from .models import Product,Review,ProductImage
+from .models import Product,Review,ProductImage,Brand
+from django.db.models.aggregates import Count
 
 class Product_List(ListView):
     model=Product
@@ -30,6 +31,15 @@ def add_review(request,slug):
         review=review
     )
     return redirect(f'/products/{slug}')
+
+class Brand_List(ListView):
+    model=Brand
+    paginate_by=40
+    queryset=Brand.objects.all().annotate(product_count=Count('product_brand'))
+
+
+class Brand_Detail(DetailView):
+    model=Brand
 
 
     
