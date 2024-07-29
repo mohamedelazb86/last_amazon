@@ -38,13 +38,33 @@ class Brand_List(ListView):
     queryset=Brand.objects.all().annotate(product_count=Count('product_brand'))
 
 
-class Brand_Detail(DetailView):
-    model=Brand
+# class Brand_Detail(DetailView):
+#     model=Brand
 
+#     def get_context_data(self, **kwargs) :
+#         context = super().get_context_data(**kwargs)
+#         context["related"] = Product.objects.filter(brand=self.get_object())
+#         return context
+
+class Brand_Detail(ListView):
+    model=Product
+    template_name='products/brand_detail.html'
+    paginate_by=5
+
+    def get_queryset(self):
+       brand=Brand.objects.get(slug=self.kwargs['slug'])
+       querset=super().get_queryset().filter(brand=brand)
+       return querset
+    
     def get_context_data(self, **kwargs) :
         context = super().get_context_data(**kwargs)
-        context["related"] = Product.objects.filter(brand=self.get_object())
+        context["mybrand"] = Brand.objects.filter(slug=self.kwargs['slug']).annotate(product_count=Count('product_brand'))[0]
         return context
+    
+   
+    
+
+
     
 
 

@@ -38,8 +38,8 @@
                   BRAND SINGLE PART START
         =======================================-->
         <div class="brand-single">
-            <a href="#"><img src="{{object.image.url}}" alt="brand"></a>
-            <a href="#"><h3>{{object.name}}</h3></a>
+            <a href="#"><img src="{{mybrand.image.url}}" alt="brand"></a>
+            <a href="#"><h3>{{mybrand.name}}</h3></a>
             <ul>
                 <li class="fas fa-star active"></li>
                 <li class="fas fa-star active"></li>
@@ -48,7 +48,7 @@
                 <li class="fas fa-star"></li>
                 <li class="total">(163 ratings)</li>
             </ul>
-            <p>(45 items)</p>
+            <p>({{mybrand.product_count}} items)</p>
         </div>
         <!--=====================================
                   BRAND SINGLE PART END
@@ -84,18 +84,18 @@
                     </div>
                 </div>
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-5">
-                {% for item in related %}
+                {% for object in object_list %}
                     <div class="col">
                         <div class="product-card">
                             <div class="product-media">
                                 <div class="product-label">
-                                    <label class="label-text new">new</label>
+                                    <label class="label-text new">{{object.name}}</label>
                                 </div>
                                 <button class="product-wish wish">
                                     <i class="fas fa-heart"></i>
                                 </button>
-                                <a class="product-image" href="product-video.html">
-                                    <img src="images/product/01.jpg" alt="product">
+                                <a class="product-image" href="/products/{{object.slug}}">
+                                    <img src="{{object.image.url}}" alt="product">
                                 </a>
                                 <div class="product-widget">
                                     <a title="Product Compare" href="compare.html" class="fas fa-random"></a>
@@ -105,19 +105,19 @@
                             </div>
                             <div class="product-content">
                                 <div class="product-rating">
-                                    <i class="active icofont-star"></i>
-                                    <i class="active icofont-star"></i>
-                                    <i class="active icofont-star"></i>
-                                    <i class="active icofont-star"></i>
-                                    <i class="icofont-star"></i>
-                                    <a href="product-video.html">(3)</a>
+                                    <i class=" icofont-star {% if object.avg_rate > 0 %} active {% endif %}"></i>
+                                    <i class=" icofont-star {% if object.avg_rate > 1 %} active {% endif %}"></i>
+                                    <i class=" icofont-star {% if object.avg_rate > 2 %} active {% endif %}"></i>
+                                    <i class=" icofont-star {% if object.avg_rate > 3 %} active {% endif %}"></i>
+                                    <i class="icofont-star {% if object.avg_rate > 4 %} active {% endif %}"></i>
+                                    <a href="product-video.html">({{object.review_count}})</a>
                                 </div>
                                 <h6 class="product-name">
-                                    <a href="product-video.html">fresh green chilis</a>
+                                    <a href="product-video.html">{{object.anme}}</a>
                                 </h6>
                                 <h6 class="product-price">
-                                    <del>$34</del>
-                                    <span>$28<small>/piece</small></span>
+                                 
+                                    <span>${{object.price}}<small>/piece</small></span>
                                 </h6>
                                 <button class="product-add" title="Add to Cart">
                                     <i class="fas fa-shopping-basket"></i>
@@ -134,30 +134,45 @@
                 {% endfor %}
                   
                 </div>
+            {% if is_paginated %}
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="bottom-paginate">
                             <p class="page-info">Showing 12 of 60 Results</p>
                             <ul class="pagination">
+                            
+                            {% if page_obj.has_previous %}
                                 <li class="page-item">
-                                    <a class="page-link" href="#">
+                                    <a class="page-link" href="?page={{page_obj.previous_page_number}}">
                                         <i class="fas fa-long-arrow-alt-left"></i>
                                     </a>
                                 </li>
-                                <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">...</li>
-                                <li class="page-item"><a class="page-link" href="#">60</a></li>
+                            {% endif %}
+
+                        {% for i in paginator.page_range %}
+                            {% if page_obj.number == i %}
+                                 <li class="page-item"><a class="page-link active" href="#">{{i}}</a></li>
+                            {% elif i >= page_obj.number|add:'-2' and i <= page_obj.number|add:'2' %}
+                                <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                                
+                               
+
+                            {% if page_obj.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="#">
+                                    <a class="page-link" href="?apge={{page_obj.next_page_number}}">
                                         <i class="fas fa-long-arrow-alt-right"></i>
                                     </a>
                                 </li>
+                            {% endif %}
+
+
                             </ul>
                         </div>
                     </div>
                 </div>
+            {% endif %}
             </div>
         </section>
         <!--=====================================
