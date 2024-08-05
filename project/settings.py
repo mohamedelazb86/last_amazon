@@ -45,11 +45,33 @@ INSTALLED_APPS = [
     "taggit",
     'django_summernote',
     "django_bootstrap5",
+    'rest_framework',
+    'django_filters',
+     'rest_framework.authtoken',
+     'rest_framework_simplejwt',
+     'drf_yasg',
 
     # my apps
     'posts',
-    'products'
+    'products',
+    'settings',
+    'orders',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 50,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        #'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+       
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,6 +96,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'settings.context_data.get_contect_data',
+                'orders.context_data.get_context_data'
             ],
         },
     },
